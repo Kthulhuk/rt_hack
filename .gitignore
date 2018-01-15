@@ -4,3 +4,5 @@ build/
 dist/
 
 rt_hack\.egg-info/
+
+docs/
