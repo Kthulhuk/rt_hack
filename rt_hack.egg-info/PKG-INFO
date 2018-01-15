@@ -1,0 +1,15 @@
+Metadata-Version: 1.1
+Name: rt-hack
+Version: 0.0.1
+Summary: A bunch of tests to determine the vulnerability of an IoT device
+Home-page: https://github.com/Kthulhuk/RT_Hack
+Author: Jean-Hieu HUYNH
+Author-email: jean-hieu.huynh@ensea.fr
+License: GNU Affero General Public License v3
+Description-Content-Type: UNKNOWN
+Description: UNKNOWN
+Keywords: rt_hack
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.6
