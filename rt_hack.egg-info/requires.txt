@@ -1,6 +1,0 @@
-docopt
-sphinx
-autodoc
-coverage
-flake8
-chardet
