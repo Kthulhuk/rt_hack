@@ -15,15 +15,15 @@ setup(
     name='rt_hack',
     version='0.0.1',
     description="A bunch of tests to determine the vulnerability of an IoT device",
-    entry_points={
-        'console_scripts': [
-            'rt_hack = rt_hack.__init__:main'
-        ]
-    },
     url='https://github.com/Kthulhuk/RT_Hack',
     author="Jean-Hieu HUYNH",
     author_email='jean-hieu.huynh@ensea.fr',
-    packages=find_packages(include=['rt_hack']),
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'rt_hack = rt_hack.__init__:main'
+        ],
+    },
     include_package_data=True,
     install_requires=requirements,
     license="GNU Affero General Public License v3",

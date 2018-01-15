@@ -22,7 +22,7 @@ To install use pip:
 
 Or clone the repo:
 
-    $ git clone http://gitlab.lan/C3NRD/rt_hack
+    $ git clone https://github.com/Kthulhuk/RT_Hack
 
     $ python3 setup.py install
     
