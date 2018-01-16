@@ -204,7 +204,7 @@ def ascii_art():
     from termcolor import cprint
     from pyfiglet import figlet_format
 
-    cprint(figlet_format('Hacking Toolkit By JH', font='starwars'),
+    cprint(figlet_format('Attack Toolkit By JH', font='starwars'),
            'yellow', attrs=['bold'])
 
 ###############################################################################
