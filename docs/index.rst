@@ -3,9 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-rt_hack
-==================================================
+Welcome to RT_Hack’s documentation !
+====================================
 
-.. automodule:: rt_hack
-   :members:
-   :special-members:
+Contents:
+
+.. toctree::
+	:maxdepth: 2
+
+	about
+	install
+	usage
+	code
