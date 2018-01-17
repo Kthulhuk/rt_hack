@@ -2,108 +2,45 @@
 RT_Hack
 =======
 
-Overview
---------
+About Attack Toolkit
+--------------------
 
-A bunch of tests to determine the vulnerability of an IoT device
+The Attack Toolkit By JH is a simple CLI (command-line interface) allowing the user to perform attacks against another interface. This toolkit was made as a third-year project at ENSEA in the Networks and Communications Branch under the supervision of Christophe BARES. It was built upon the work of Giuliani Carlo and Montini Nicola from the University of Padova.
 
+There are two types of functions in the toolkit : 
 
-* Free software: GNU Affero General Public License v3
-* Documentation: https://rt_hack.readthedocs.io.
+- Reconnaisance functions
+- Denial of service functions
 
+Install RT_Hack
+---------------
 
-Installation
-------------
+The following steps describe how to install (or update) RT_Hack itself.
 
-To install use pip:
+.. code-block:: bash
 
-    $ pip3 install rt_hack
+   $ git clone https://github.com/Kthulhuk/rt_hack
+   $ cd rt_hack
+   $ python3 setup.py install
 
+Build the documentation offline
+-------------------------------
 
-Or clone the repo:
+The RT_Hack project's documentation is written using reStructuredText (files *.rst*) and can be built using the Sphinx python library. Go to the rt_hack folder and execute this command :
 
-    $ git clone https://github.com/Kthulhuk/RT_Hack
+.. code-block:: bash
 
-    $ python3 setup.py install
-    
+   $ make doc
 
-Usage
------
+The offline documentation should now be in rt_hack/docs/_build/html.
 
-Documentation
-=============
+Starting RT_Hack
+----------------
 
-Read the documentation to understand how to use RT_Hack.
+RT_Hack's interactive shell is run in a terminal session. Root privileges are needed to send the packets, so we’re using sudo here:
 
-Helper targets
-==============
+.. code-block:: bash
 
-To build the documentation, run:
+   $ sudo rt_hack
 
-    $ make doc
-    
-To run the test, run :
-
-    $ make test
-
-To check the code's superficial cleanliness run:
-
-    $ make lint
-    
-To run tests each time a Python file is edited
-
-    $ make live
-
-Dev cycle
-=========
-
-One branch derived from latest master per new feature or bug fix.
-
-When this branch is complete:
-
-- Merge master back in it
-        
-        $ git merge master
-        
-- Make sure all tests pass, the code is clean and the doc compiles:
-
-        $ make
-        
-- Bump the version appropriately (no tags):
-
-        $ bumpversion (major|minor|patch) --commit --no-tag
-        
-- Rebase everything in order to make one commit (if more are needed, talk the the maintainer). To avoid catastrophic failure, create another branch that won't be rebased first. Keep bumpversion's commit message somewhere in the rebased commit message, but not always on the first line.
-
-        $ git branch <my_feature>_no_rebase
-        $ git rebase -i master
-        
-- Make a pull request, or, if you are the maintainer, switch to master
-
-        $ git checkout master
-        
-- If you are the maintainer, merge the feature branch:
-        
-        $ git merge <my_feature>
-        
-- If you are the maintainer, make sure everything works as it should
-
-- If you are the maintainer, close the relevent issues (by adding fix... in the commit message with --amend)
-
-- If you are the maintainer, create the appropriate tag
-
-        $ git tag <version>
-
-- If you are the maintainer, push the code to any relevant remote
-
-        $ git push
-        
-- If you are the maintainer, upload the code to PyPI
-
-        $ python3 setup.py sdist
-        $ twine upload dist/*
-        
-- If you are the maintainer, check that the docs are updated
-
-- If you are the maintainer or the devops guy, deploy the new code to all relevant machines
-
+Then, simply follow the interactive shell. Below, you'll find a small description of each function.
